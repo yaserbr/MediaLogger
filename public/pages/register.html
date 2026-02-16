@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="auth-bg">
+
+  <!-- Animated Background -->
+  <div class="gradient-bg"></div>
+
+  <div class="shapes">
+    <span class="shape s1"></span>
+    <span class="shape s2"></span>
+    <span class="shape s3"></span>
+    <span class="shape s4"></span>
+  </div>
+
+  <div class="card-glow"></div>
+
+  <div class="auth-container">
+    <div class="glass-card">
+      <h2 class="logo"><img src="/images/logo.png" alt="My logo " height="150px"></h2>
+      <h3 class="title">Create Account</h3>
+
+      <form id="registerForm">
+        <div class="input-group">
+          <label>Username</label>
+          <input name="username" placeholder="Example: Faisal" required />
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input name="email" type="email" placeholder="name@example.com" required />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input name="password" type="password" placeholder="At least 6 characters" required />
+        </div>
+
+        <button type="submit" class="primary-btn">Register</button>
+
+        <div id="msg" class="error-msg d-none"></div>
+      </form>
+
+      <p class="register">
+        Already have an account? <a href="/login">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="/js/register.js"></script>
+</body>
+</html>
