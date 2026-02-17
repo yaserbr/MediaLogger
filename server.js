@@ -1,4 +1,6 @@
-require("dotenv").config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const express = require("express");
 const path = require("path");
@@ -14,38 +16,44 @@ const requireAuth = require("./middleware/requireAuth");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// هنا احتياط بسيط للهيدر والأمان، وCSP مطفي عشان Bootstrap CDN ما يزعجنا
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(morgan("dev"));
 
-// هنا نخلي السيرفر يفهم JSON و form-urlencoded
+/* =========================
+   SESSION CONFIG
+========================= */
 
-// السيشن نخزنها في MongoDB عشان ما تضيع إذا طفى السيرفر
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "fallback_secret",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
+      mongoUrl: process.env.MONGO_URL,
       collectionName: "sessions",
     }),
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // أسبوع
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
 );
 
-// ملفات الواجهة (CSS/JS)
+/* =========================
+   STATIC FILES
+========================= */
+
 app.use(express.static(path.join(__dirname, "public")));
 
+/* =========================
+   ROUTES
+========================= */
 
-// روت رئيسي: إذا مسجل دخوله وده للـ app، غير كذا للـ login
 app.get("/", (req, res) => {
   if (req.session.userId) return res.redirect("/app");
   return res.redirect("/login");
@@ -69,11 +77,9 @@ app.get("/logout", (req, res) => {
   req.session.destroy(() => res.redirect("/login"));
 });
 
-// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/entries", entryRoutes);
 
-// endpoint بسيط عشان الواجهة تعرف مين المستخدم
 app.get("/api/me", requireAuth, (req, res) => {
   res.json({
     userId: req.session.userId,
@@ -81,10 +87,17 @@ app.get("/api/me", requireAuth, (req, res) => {
   });
 });
 
-mongoose.connect(process.env.MONGODB_URI)
+/* =========================
+   DATABASE CONNECTION
+========================= */
+
+mongoose
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+    app.listen(PORT, () =>
+      console.log(`Server running on port ${PORT}`)
+    );
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
