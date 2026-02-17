@@ -1,11 +1,38 @@
 const mongoose = require("mongoose");
 
-// هذا موديل المستخدم، نخزن الهاش بدل كلمة المرور عشان الأمان
+// موديل المستخدم (يدعم عادي + Google)
 const UserSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, trim: true, minlength: 2, maxlength: 30 },
-    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
-    passwordHash: { type: String, required: true },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2,
+      maxlength: 30,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
+    // كلمة المرور مطلوبة فقط إذا ما كان Google User
+    passwordHash: {
+      type: String,
+      required: function () {
+        return !this.googleId;
+      },
+    },
+
+    // خاص بتسجيل الدخول عبر Google
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   { timestamps: true }
 );
