@@ -113,7 +113,6 @@ app.get("/app", requireAuth, (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy(() => res.redirect("/login"));
 });
-
 /* =========================
    GOOGLE AUTH
 ========================= */
@@ -121,6 +120,13 @@ app.get("/logout", (req, res) => {
 // Start Google Login
 app.get(
   "/auth/google",
+  (req, res, next) => {
+    // لو جاي من الجوال نحفظ المعلومة في السيشن
+    if (req.query.mobile === "1") {
+      req.session.isMobile = true;
+    }
+    next();
+  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
   })
@@ -133,13 +139,34 @@ app.get(
     failureRedirect: "/login",
   }),
   (req, res) => {
+
     // حفظ بيانات المستخدم في السيشن
     req.session.userId = req.user._id;
     req.session.username = req.user.username;
 
-    res.redirect("/app");
+    const isMobile = req.session.isMobile === true;
+
+    // تنظيف الفلاج
+    req.session.isMobile = false;
+
+    if (isMobile) {
+      // يرجع للتطبيق
+      res.send(`
+        <html>
+          <body>
+            <script>
+              window.location.replace("medialoggermobile://success");
+            </script>
+          </body>
+        </html>
+      `);
+    } else {
+      // يرجع للويب طبيعي
+      res.redirect("/app");
+    }
   }
 );
+
 
 /* =========================
    API ROUTES
