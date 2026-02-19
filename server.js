@@ -18,6 +18,8 @@ const entryRoutes = require("./routes/entryRoutes");
 const requireAuth = require("./middleware/requireAuth");
 
 const app = express();
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 3000;
 
 /* =========================
@@ -57,9 +59,8 @@ app.use(
     cookie: {
       httpOnly: true,
 
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",   // مهم جدًا
+      secure: true,       // مهم جدًا (عشان https)
 
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
