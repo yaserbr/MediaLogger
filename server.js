@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
+const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -30,6 +30,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(morgan("dev"));
 
+app.use(
+  cors({
+    origin: true, // يسمح من Expo والجوال
+    credentials: true,
+  })
+);
+
+
 /* =========================
    SESSION CONFIG
 ========================= */
@@ -48,7 +56,8 @@ app.use(
 
     cookie: {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 أيام
     },
   })
