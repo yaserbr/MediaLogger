@@ -10,7 +10,7 @@ router.use(requireAuth);
 // GET /api/entries
 router.get("/", async (req, res) => {
   // نجيب إدخالات المستخدم الحالي فقط
-  const entries = await Entry.find({ userId: req.session.userId }).sort({ createdAt: -1 });
+  const entries = await Entry.find({ userId: req.userId}).sort({ createdAt: -1 });
   res.json(entries);
 });
 
@@ -20,9 +20,6 @@ router.post("/", async (req, res) => {
     const { mediaType, title, rating, review, consumedAt } = req.body;
 
     // تأكد أن المستخدم مسجل دخول
-    if (!req.session.userId) {
-      return res.status(401).json({ error: "Not logged in" });
-    }
 
     // تحقق بسيط
     if (!mediaType || !title || rating === undefined) {
@@ -39,7 +36,7 @@ router.post("/", async (req, res) => {
     }
 
     const entry = await Entry.create({
-      userId: req.session.userId, // من السيشن ✅
+      userId: req.userId, // من السيشن ✅
       mediaType: String(mediaType),
       title: String(title).trim(),
       rating: r,
@@ -92,7 +89,7 @@ router.put("/:id", async (req, res) => {
   }
 
   const updated = await Entry.findOneAndUpdate(
-    { _id: req.params.id, userId: req.session.userId },
+    { _id: req.params.id, userId: req.userId },
     patch,
     { new: true }
   );
@@ -103,7 +100,7 @@ router.put("/:id", async (req, res) => {
 
 // DELETE /api/entries/:id
 router.delete("/:id", async (req, res) => {
-  const deleted = await Entry.findOneAndDelete({ _id: req.params.id, userId: req.session.userId });
+  const deleted = await Entry.findOneAndDelete({ _id: req.params.id, userId: req.userId });
   if (!deleted) return res.status(404).json({ error: "Entry not found" });
 
   res.json({ ok: true });

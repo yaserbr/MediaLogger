@@ -1,14 +1,27 @@
-module.exports = function requireAuth(req, res, next) {
-  // هنا نتاكد ان المستخدم عنده سيشن، إذا ما عنده يعني مب مسجل دخول
-  if (!req.session || !req.session.userId) {
-    // إذا API نرجع JSON عشان الفرونت يفهم
-    if (req.path.startsWith("/api") || req.originalUrl.startsWith("/api")) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
+const jwt = require("jsonwebtoken");
 
-    // إذا صفحة HTML نحوله لـ login
-    return res.redirect("/login");
+module.exports = (req, res, next) => {
+
+  // Web (Session)
+  if (req.session && req.session.userId) {
+    req.userId = req.session.userId;
+    return next();
   }
 
-  next();
+  // Mobile (JWT)
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Not authorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
+    next();
+  } catch {
+    return res.status(401).json({ error: "Invalid token" });
+  }
 };
