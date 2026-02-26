@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="auth-bg">
+  <!-- Background Shapes -->
+  <!-- Animated Gradient Background -->
+  <div class="gradient-bg"></div>
+
+  <!-- Premium Floating Shapes -->
+  <div class="shapes">
+    <span class="shape s1"></span>
+    <span class="shape s2"></span>
+    <span class="shape s3"></span>
+    <span class="shape s4"></span>
+  </div>
+
+  <!-- Glow Behind Card -->
+  <div class="card-glow"></div>
+
+  <div class="auth-container">
+    <div class="glass-card">
+      <h2 class="logo"><img src="/images/logo.png" alt="My logo " height="150px"></h2>
+      <h3 class="title">Login</h3>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Email</label>
+          <input name="email" type="email" placeholder="username@gmail.com" required />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input name="password" type="password" placeholder="Password" required />
+        </div>
+
+        <a href="#" class="forgot">Forgot Password?</a>
+
+        <button type="submit" class="primary-btn">Sign in</button>
+
+        <div id="msg" class="error-msg d-none"></div>
+      </form>
+
+      <div class="divider">or continue with</div>
+
+      <div class="socials">
+        <a href="/auth/google" class="social-btn">
+          <img src="/images/Google.png" alt="Google" height="30px">
+        </a>
+        <button class="social-btn"><img src="/images/Github.png" alt="Github" srcset=""></button>
+        <button class="social-btn"><img src="/images/Facebook.png" alt="facebook"></button>
+      </div>
+
+      <p class="register">
+        Don’t have an account? <a href="/register">Register for free</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="/js/login.js"></script>
+</body>
+
+</html>

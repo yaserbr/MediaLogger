@@ -1,0 +1,446 @@
+/* ================= RESET ================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ================= BASE ================= */
+
+body.auth-bg {
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+body.dashboard-bg {
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+
+  /* Background Image */
+  background-image: url("/images/b2.png"); /* عدل الاسم حسب صورتك */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  overflow-x: hidden;
+}
+
+
+/* ================= ANIMATED GRADIENT ================= */
+
+.gradient-bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0e4cd2, #0b2f6f, #1a237e);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  z-index: -3;
+}
+.gradient-bg22 {
+  position: fixed;
+  inset: 0;
+
+  background: linear-gradient(
+    135deg,
+    rgba(14, 76, 210, 0.6),
+    rgba(11, 47, 111, 0.6),
+    rgba(26, 35, 126, 0.6)
+  );
+
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  z-index: -3;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ================= SHAPES ================= */
+
+.shapes {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  animation: float 20s infinite ease-in-out;
+}
+
+.s1 {
+  width: 300px;
+  height: 300px;
+  background: #4facfe;
+  top: 10%;
+  left: 5%;
+}
+
+.s2 {
+  width: 250px;
+  height: 250px;
+  background: #667eea;
+  bottom: 10%;
+  left: 15%;
+  animation-delay: 3s;
+}
+
+.s3 {
+  width: 350px;
+  height: 350px;
+  background: #00f2fe;
+  top: 20%;
+  right: 5%;
+  animation-delay: 6s;
+}
+
+.s4 {
+  width: 220px;
+  height: 220px;
+  background: #43e97b;
+  bottom: 15%;
+  right: 20%;
+  animation-delay: 9s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -60px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ================= GLOW ================= */
+
+.card-glow {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(79,172,254,0.5), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(80px);
+  z-index: -1;
+}
+
+/* ================= CONTAINER ================= */
+
+.auth-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  margin-top: 60px;
+}
+
+/* ================= GLASS CARD ================= */
+
+.glass-card {
+  width: 360px;
+  padding: 40px 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  color: white;
+  text-align: center;
+}
+
+/* ================= TITLES ================= */
+
+.logo {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.title {
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+/* ================= FORM ================= */
+
+.input-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* ================= BUTTON ================= */
+
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #0e1f40, #1a3fa0);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+/* ================= LINKS ================= */
+
+.forgot {
+  font-size: 0.8rem;
+  color: #cdd6ff;
+  display: block;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.register {
+  margin-top: 20px;
+  font-size: 0.8rem;
+}
+
+.register a {
+  color: white;
+  font-weight: 600;
+}
+
+/* ================= SOCIAL ================= */
+
+.divider {
+  margin: 20px 0 10px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px; /* مهم */
+  cursor: pointer;
+}
+
+.social-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.social-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+/* ================= ERROR ================= */
+
+.error-msg {
+  margin-top: 10px;
+  padding: 8px;
+  background: #ff4d4f;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.d-none {
+  display: none;
+}
+
+/* ================= DASHBOARD LAYOUT ================= */
+
+.dashboard {
+  max-width: 1200px;
+}
+
+/* Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 32px;
+  align-items: start;
+} 
+
+/* Make cards consistent height */
+.dashboard-grid .card {
+  min-height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ================= HEADER ================= */
+
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Container */
+.header-wrap {
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+/* Left */
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Right */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* User */
+.user-box {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.user-label {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+/* Entries pill */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+
+  font-size: 0.8rem;
+}
+
+.count {
+  font-weight: 700;
+}
+
+/* Logout button */
+.logout-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+
+  border: 1px solid rgba(255,80,80,0.5);
+  color: #ff6b6b;
+
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: rgba(255,80,80,0.15);
+  color: white;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .header-wrap {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .header-right {
+    justify-content: center;
+  }
+  
+  .user-box {
+    text-align: center;
+  }
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+/* Divider between gallery items */
+
+#entryList > * {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.594);
+}
+
+/* Remove line from last item */
+#entryList > *:last-child {
+  border-bottom: none;
+}
