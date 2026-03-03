@@ -4,7 +4,14 @@ import { ApiClient } from "./api.js";
   هنا الفكرة: نسوي OOP بكلاسات واضحة
   ونستخدم Custom Events عشان الكلاسات تتكلم مع بعض بدون ما تلخبط
 */
+import { io } from "https://cdn.socket.io/4.7.2/socket.io.esm.min.js";
 
+const socket = io({
+  withCredentials: true
+});
+
+// 👇 عشان نقدر نختبر من الكونسول
+window.socket = socket;
 class EntryStore {
   constructor() {
     this.entries = [];
@@ -200,10 +207,29 @@ class AppController {
   async init() {
     const me = await this.api.me();
 
+    // 🔥 دخول غرفة المستخدم
+    socket.emit("joinUserRoom", me.userId);
+
+    // 🔥 الاستماع للتحديثات
+    socket.on("entriesUpdated", async () => {
+      console.log("Realtime update received");
+
+      const fresh = await this.api.getEntries();
+      this.store.setEntries(fresh);
+
+      this._refreshHeader(me.username);
+      this.gallery.render(this.store.getAll());
+    });
+
+    // تحميل أولي طبيعي
     const entries = await this.api.getEntries();
     this.store.setEntries(entries);
 
-    this.header.render({ username: me.username, count: this.store.getAll().length });
+    this.header.render({
+      username: me.username,
+      count: this.store.getAll().length
+    });
+
     this.gallery.render(this.store.getAll());
   }
 
