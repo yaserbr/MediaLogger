@@ -47,25 +47,23 @@ app.use(
    SESSION CONFIG
 ========================= */
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL,
-      collectionName: "sessions",
-    }),
-    cookie: {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: "none",
-      secure: true,
-    },
-  })
-);
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+    collectionName: "sessions",
+  }),
+  cookie: {
+  httpOnly: true,
+  sameSite: "none",
+  secure: true,
+  maxAge: 1000 * 60 * 60 * 24 * 7,
+},
+});
+
+app.use(sessionMiddleware);
 
 /* =========================
    PASSPORT
@@ -183,15 +181,45 @@ const io = new Server(server, {
   },
 });
 
-// نخليه متاح داخل الراوتات
+// ربط session بالـ socket
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next);
+});
+
+// دعم JWT + Session
+io.use((socket, next) => {
+  const token = socket.handshake.auth?.token;
+
+  // لو جا من الجوال (JWT)
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      socket.userId = decoded.id;
+      return next();
+    } catch {
+      return next(new Error("Unauthorized"));
+    }
+  }
+
+  // لو جا من الموقع (Session)
+  const sessionUserId = socket.request.session?.userId;
+
+  if (sessionUserId) {
+    socket.userId = sessionUserId;
+    return next();
+  }
+
+  return next(new Error("Unauthorized"));
+});
+
 app.set("io", io);
 
 io.on("connection", (socket) => {
   console.log("🔌 Socket connected");
 
-  socket.on("joinUserRoom", (userId) => {
-    socket.join(userId);
-  });
+  if (socket.userId) {
+    socket.join(String(socket.userId));
+  }
 
   socket.on("disconnect", () => {
     console.log("❌ Socket disconnected");
